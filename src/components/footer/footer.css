@@ -1,0 +1,63 @@
+.footer-container{
+  background-color: #009688;
+  width: 100vw;
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top : 10vh;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 5;
+}
+
+/*  "footer-home-mode" : "footer-shop-mode" */
+.footer-container {
+  background: #009688; /* Old browsers */
+  background: -moz-linear-gradient(-45deg, #009688 0%, #009688 50%, #ecedef 50%, #ecedef 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, #009688 0%,#009688 50%,#ecedef 50%,#ecedef 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, #009688 0%,#009688 50%,#ecedef 50%,#ecedef 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#009688', endColorstr='#ecedef',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+.footer-shop-mode {
+  background: #009688; /* Old browsers */
+  background: -moz-linear-gradient(45deg, #009688 0%, #009688 50%, #ecedef 50%, #ecedef 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(45deg, #009688 0%,#009688 50%,#ecedef 50%,#ecedef 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(45deg, #009688 0%,#009688 50%,#ecedef 50%,#ecedef 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#009688', endColorstr='#ecedef',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+.home-mode {
+  font-family: 'Dosis', sans-serif;
+  margin-left: 10vw;
+  font-size: 16px;
+  color: white;
+  background-color: #009688;
+  border: 0;
+}
+.shop-mode {
+  font-family: 'Dosis', sans-serif;
+  margin-right: 10vw;
+  font-size: 16px;
+  color: black;
+  background-color: #ecedef;
+  border: 0;
+}
+.search-items {
+  font-family: 'Dosis', sans-serif;
+  width: 90px;
+  font-size: 16px;
+  color: black;
+  background-color: white;
+  border: 0;
+  padding: 3px;
+}
+
+
+@media (min-width: 426px) and (max-width: 1024px)  {
+}
+
+@media (min-width: 1024) {
+}

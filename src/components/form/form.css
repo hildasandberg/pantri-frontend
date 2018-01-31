@@ -1,0 +1,110 @@
+.page-darker {
+  z-index: 4000;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: rgba(0,0,0, 0.5);
+}
+
+.item-form-container, .category-form-container {
+  width: 60vw;
+  padding: 10vw;
+  background-color: white;
+  margin-left: 10vw;
+  position: absolute;
+  z-index: 5000;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-form-container {
+  top: 10vh;
+}
+
+.category-form-container {
+  bottom: 30vh;
+}
+
+.item-form-container input, .item-form-container select {
+  width: 100%;
+  height: 10vw;
+  font-family: 'Dosis', sans-serif;
+  background-color: #ecedef;
+  border: 1px solid #ecedef;
+  font-size: 16px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+.selectIcon {
+  width: 100%;
+  height: 10vw;
+}
+
+/*  checkboxes for home and buy */
+.form-item-status {
+  margin-bottom: 15px;
+}
+
+.form-item-status input {
+  height: 1px;
+  display: inline;
+  visibility: hidden;
+  display: none;
+}
+
+.form-item-status .fas {
+  color: #cacaca;
+  font-size: 40px;
+  margin-top: 0;
+  display: inline;
+}
+
+.form-item-status {
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.home-container input:checked + .fa-home {
+  color: #009688;
+}
+
+.shop-container input:checked + .fa-shopping-cart {
+  color: #ff7b72;
+}
+
+.submit-btn {
+  font-size: 16px;
+  width: 100%;
+  height: 10vw;
+  background-color: #009688;
+  color: white;
+  border: 0;
+}
+
+.close-btn {
+  font-size: 12px;
+  height: 5vw;
+  width: 20vw;
+  background-color: #ff7b72;
+  color: white;
+  border: 0;
+  align-self: flex-end;
+  margin-bottom: 15px;
+}
+
+
+@media (min-width: 426px) and (max-width: 1024px)  {
+}
+
+@media (min-width: 1024) {
+}

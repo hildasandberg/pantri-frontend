@@ -1,0 +1,32 @@
+.item-in-list {
+  width: 85vw;
+  margin: auto;
+  /* margin-left: 7.5vw; */
+  position: relative;
+  margin-top: 2vw;
+  margin-bottom: 15vh;
+  padding: 2.5%;
+  background-color: white;
+  /* border: 1px solid; */
+  /* box-shadow: 5px 10px #cacaca; */
+}
+
+.add-item-button {
+  position: absolute;
+  z-index: 3;
+  left: 40vw;
+  bottom: -15px;
+  height: 10vw;
+  width: 10vw;
+  border-radius: 50%;
+  border: 0;
+  font-size: 20px;
+  color: white;
+  background-color: #ff7b72;
+}
+
+@media (min-width: 426px) and (max-width: 1024px)  {
+}
+
+@media (min-width: 1024) {
+}

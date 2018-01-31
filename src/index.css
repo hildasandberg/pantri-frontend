@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css?family=Libre+Barcode+39+Text');
+
+body {
+  /* background-color: #ecedef; */
+  margin: 0;
+  padding: 0;
+  font-family: 'Dosis', sans-serif;
+}
+
+@keyframes greenToGray {
+    from {background-color: #009688;}
+    to {background-color: #ecedef}
+}
+
+@keyframes grayToGreen {
+    from {background-color: #ecedef;}
+    to {background-color: #009688}
+}
+
+.app-container {
+  min-height: 100vh;
+  background-color: #009688;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10vh;
+  font-family: 'Dosis', sans-serif;
+  animation-name: grayToGreen;
+  animation-duration: 1s;
+}
+
+.app-shop-mode {
+  background-color: #ecedef;
+  animation-name: greenToGray;
+  animation-duration: 1s;
+}
+
+.active {
+  display: flex;
+}
+
+.inactive {
+  display: none;
+}
+
+h1 {
+  font-size: 40px;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+p {
+  font-family: 'Dosis', sans-serif;
+}
+@media (min-width: 426px) and (max-width: 1024px)  {
+  h1 {
+    font-size: 46px;
+  }
+
+}
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 46px;
+  }
+
+}
