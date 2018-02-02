@@ -11,6 +11,12 @@
   background-color: rgba(0,0,0, 0.5);
 }
 
+/* Pop-up animation */
+@keyframes form-visibility {
+    0%   {opacity: 0;}
+    100% {opacity: 1;}
+}
+
 .item-form-container, .category-form-container {
   width: 60vw;
   padding: 10vw;
@@ -21,6 +27,12 @@
   font-size: 16px;
   display: flex;
   flex-direction: column;
+  animation-name: form-visibility;
+  animation-duration: 1s;
+}
+
+.item-form-container h3, .category-form-container h3 {
+  text-align: left;
 }
 
 .item-form-container {
@@ -40,6 +52,12 @@
   font-size: 16px;
   margin-bottom: 15px;
   border-radius: 5px;
+}
+
+.item-form-container input:focus, .item-form-container select:focus {
+  border-color: #009688;
+  border-style: solid;
+  outline-style: none;
 }
 
 .selectIcon {
@@ -102,9 +120,146 @@
   margin-bottom: 15px;
 }
 
-
-@media (min-width: 426px) and (max-width: 1024px)  {
+.red-buttons {
+  display: flex;
+  justify-content: space-between;
 }
 
-@media (min-width: 1024) {
+.fa-trash-alt {
+  color: #ff7b72;
+}
+
+.delete-btn {
+  height: 5vw;
+  border: 0;
+  background-color: white;
+  padding: 0;
+}
+
+.radiolabel input {
+  display: none;
+  visibility: hidden;
+}
+
+.radiolabel img{
+  height: 30px;
+  overflow: hidden;
+}
+
+.radiolabel > .radioinput:checked + img {
+  opacity: 0.3;
+  cursor: pointer;
+}
+
+.kategorierIkoner {
+  margin: 15px 0 15px 0;
+}
+
+/* Pop-up animation */
+@keyframes pop-up-visibility {
+    0%   {opacity: 0;}
+    25%  {opacity: 1;}
+    50%  {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+.add-popup {
+  display: block;
+  color: #009688;
+  width: 63vw;
+  font-size: 60px;
+  background-color: white;
+  text-align: center;
+  position: absolute;
+  z-index: 8000;
+  animation-name: pop-up-visibility;
+  animation-duration: 2s;
+}
+
+@media (min-width: 426px) and (max-width: 1024px)  {
+  .item-form-container, .category-form-container {
+    width: 50vw;
+    padding: 3vw;
+    margin-left: 22vw;
+  }
+
+  .item-form-container {
+    top: 10vh;
+  }
+
+  .category-form-container {
+    bottom: 30vh;
+  }
+
+  .item-form-container input, .item-form-container select {
+    width: 100%;
+    height: 30px;
+  }
+
+  .selectIcon {
+    width: 100%;
+    height: 10vw;
+  }
+
+  .submit-btn {
+    width: 100%;
+    height: 40px;
+  }
+
+  .close-btn {
+    height: 40px;
+    width: 60px;
+  }
+
+  .delete-btn {
+    height: 40px;
+  }
+
+  .delete-btn {
+    font-size: 30px;
+  }
+}
+
+@media (min-width: 1000px) {
+  .item-form-container, .category-form-container {
+    width: 30vw;
+    padding: 3vw;
+    margin-left: 32vw;
+  }
+
+  .item-form-container {
+    top: 10vh;
+  }
+
+  .category-form-container {
+    bottom: 30vh;
+  }
+
+  .item-form-container input, .item-form-container select {
+    width: 100%;
+    height: 30px;
+  }
+
+  .selectIcon {
+    width: 100%;
+    height: 10vw;
+  }
+
+  .submit-btn {
+    width: 100%;
+    height: 40px;
+  }
+
+  .close-btn {
+    height: 40px;
+    width: 60px;
+  }
+
+  .delete-btn {
+    height: 40px;
+  }
+
+  .delete-btn {
+    font-size: 30px;
+  }
 }

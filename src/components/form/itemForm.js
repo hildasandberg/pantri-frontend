@@ -1,23 +1,21 @@
 import React from "react"
 import "./form.css"
 
-const units = ["Choose a unit", "pcs", "g", "hg", "kg", "l", "dl", "ml", "bag", "bottle"]
-
 export default class ItemForm extends React.Component {
 
   constructor(props) {
     super(props)
 
     this.state = {
-      // categories: cate,
       addNewItem: {
         name: "",
-        category: "",
+        category: props.initialCategory,
         amount: "",
         unit: "",
         got: false,
         buy: false
-      }
+      },
+      showAddpop: false
     }
   }
 
@@ -32,15 +30,12 @@ export default class ItemForm extends React.Component {
     const { addNewItem } = this.state
     addNewItem[event.target.name] = !addNewItem[event.target.name]
     this.setState({ addNewItem })
-    // , () => {
-    //   this.props.checkItem(this.props.id, this.state.done)
-    // }
   }
 
   handleSubmit = event => {
     console.log("Submittar form och vill skicka", this.state.addNewItem)
     event.preventDefault()
-    fetch("http://localhost:8080/items", {
+    fetch("https://pantriqueen.herokuapp.com/items", {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -51,7 +46,6 @@ export default class ItemForm extends React.Component {
       console.log(response)
       const newbie = this.state.addNewItem
       this.props.gotNewItem(newbie)
-      // return response.json()
       if (response.ok) {
         this.setState({
           addNewItem: {
@@ -60,8 +54,15 @@ export default class ItemForm extends React.Component {
             amount: "",
             unit: "",
             got: false,
-            buy: false
-          }
+            buy: false,
+          },
+          showAddpop: true
+        }, () => {
+          setInterval(() => {
+            this.setState({
+              showAddpop: false
+            })
+          }, 2000)
         })
       }
     })
@@ -74,9 +75,12 @@ export default class ItemForm extends React.Component {
           <button className="close-btn" onClick={this.props.showItemForm}> Close </button>
 
           <form onSubmit={this.handleSubmit} className={`form-container ${this.props.type}`}>
+            <h3>Add item</h3>
             <div>
               Name:
               <input
+                required
+                maxlength="25"
                 type="text"
                 name="name"
                 placeholder="Item name"
@@ -91,13 +95,24 @@ export default class ItemForm extends React.Component {
               Category:
               <select className="selectCategory" name="category">
                 {this.props.dbCategories.map(item =>
-                  <option value={item.name} key={item._id} >{item.name}</option>)
+                  <option
+                    selected={this.props.initialCategory === item.name}
+                    value={item.name}
+                    key={item._id} >{item.name}
+                  </option>)
                 }
               </select>
             </div>
 
+            {this.state.showAddpop &&
+              <div className="add-popup">
+                Added!
+              </div>
+            }
+
             Amount:
             <input
+              maxlength="25"
               type="text"
               name="amount"
               placeholder="How much"
@@ -109,7 +124,7 @@ export default class ItemForm extends React.Component {
               value={this.state.addNewItem.unit}>
               Unit:
               <select className="selectUnit" name="unit" onChange={this.handleInput}>
-                {units.map(item =>
+                {this.props.units.map(item =>
                   <option key={item} value={item}>{item}</option>)}
               </select>
             </div>

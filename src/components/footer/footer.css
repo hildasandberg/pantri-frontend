@@ -37,6 +37,7 @@
   background-color: #009688;
   border: 0;
 }
+
 .shop-mode {
   font-family: 'Dosis', sans-serif;
   margin-right: 10vw;
@@ -45,6 +46,11 @@
   background-color: #ecedef;
   border: 0;
 }
+
+.shop-mode:hover, .home-mode:hover {
+  color: #cacaca;
+}
+
 .search-items {
   font-family: 'Dosis', sans-serif;
   width: 90px;

@@ -10,22 +10,22 @@
 @keyframes greenToWhite {
   from {
     background-color: #009688;
-    color: white;
+    color: #ecedef;
   }
   to {
-    background-color: white;
+    background-color: #ecedef;
     color: #009688;
   }
 }
 
 @keyframes whiteToGreen {
   from {
-    background-color: white;
+    background-color: #ecedef;
     color: #009688;
   }
   to {
     background-color: #009688;
-    color: white;
+    color: #ecedef;
   }
 }
 
@@ -46,7 +46,7 @@
 }
 
 .header-home-mode {
-  background-color: white; /* #ecedef; */
+  background-color: #ecedef; /* #ecedef; */
   color: #009688;
   animation-name: greenToWhite;
   animation-duration: 1s;
@@ -55,31 +55,56 @@
 .header-cate-container {
   margin: auto;
   width: 80%;
-  max-height: 16vh;
+  max-height: 90px; /* 16vh; */
   position: relative;
   margin-top: 10vh;
   margin-bottom: 2vh;
-  /* overflow: hidden; */
 }
 
 .one-cate {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes wiggle {
+  0% {transform: rotate(10deg);}
+  25% {transform: rotate(-10deg);}
+  50% {transform: rotate(20deg);}
+  75% {transform: rotate(-5deg);}
+  100% {transform: rotate(0deg);}
+}
+.one-cate:hover {
+  animation-name: wiggle;
+  animation-duration: 2s;
 }
 
 .one-cate p {
+  padding: 0;
+  text-align: center;
   font-size: 12px;
   display: block;
   color: white;
+}
+
+.header-p-shop-mode.header-p{
+  color: black;
 }
 
 .one-cate-image {
   background: white;
   width: 35px;
   height: 35px;
-  margin: 5px;
+  margin: auto;
+  /* margin: 5px; */
   padding: 5px;
   background-color: white;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .one-cate-image img {
@@ -100,16 +125,25 @@
   background-color: white;
 }
 
-/* .clear-cate-button {
+.header-button-container button:hover {
+  color: #ff7b72;
 }
 
-.add-cate-button {
-  width: 5vw;
-  border-radius: 50%;
-} */
+/* Slider bug fix */
+.header-cate-container.slick-slide.slick-active {
+    display: block;
+}
+
+.header-cate-container.slick-track {
+    width: 9000px;
+}
 
 @media (min-width: 426px) and (max-width: 1024px)  {
 }
 
-@media (min-width: 1024) {
+@media (min-width: 1024px) {
+  .header-button-container button {
+    height: 3vw;
+    font-size: 16px;
+  }
 }

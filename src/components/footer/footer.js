@@ -5,7 +5,6 @@ import "./footer.css"
 class Footer extends React.Component {
 
   filterItems = event => {
-    // console.log("trying to search for", event.target.value)
     this.props.filterItems(event.target.value)
   }
 

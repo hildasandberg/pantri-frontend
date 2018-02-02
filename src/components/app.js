@@ -1,12 +1,13 @@
 import React from "react"
 import { BrowserRouter, Route } from "react-router-dom"
-import { CSSTransitionGroup } from "react-transition-group"
 import ItemForm from "components/form/itemForm.js"
 import CategoryForm from "components/form/categoryForm.js"
 import ChangeItemForm from "components/form/changeItemForm"
 import ItemList from "components/itemList/itemList.js"
 import Footer from "components/footer/footer"
 import Header from "components/header/header"
+
+const units = ["pcs", "g", "hg", "kg", "l", "dl", "ml", "bag", "jar", "bottle"]
 
 class App extends React.Component {
 
@@ -15,36 +16,34 @@ class App extends React.Component {
 
     this.state = {
       categories: [],
-      categoriesLength: 0,
       items: [],
       itemFormActive: false,
       cateFormActive: false,
       changeItemFormActive: false,
       filterVariable: "",
       searchTerm: "",
-      itemToChange: "",
+      itemToChange: {},
       homeMode: true
     }
   }
 
   // Fetches items and categories from the server
   componentDidMount() {
-    fetch("http://localhost:8080/items").then(response => {
+    fetch("https://pantriqueen.herokuapp.com/items/").then(response => {
       return response.json()
     }).then(json => {
       this.setState({ items: json })
     })
-    fetch("http://localhost:8080/categories").then(response => {
+    fetch("https://pantriqueen.herokuapp.com/categories").then(response => {
       return response.json()
     }).then(json => {
       this.setState({
-        categories: json,
-        categoriesLength: json.length
+        categories: json
       })
     })
   }
 
-  // // Toggles mode of app from home to shop and background from green to gray
+  // Toggles mode of app from home to shop and background from green to gray
   toggleAppMode= mode => {
     if (mode === "home-mode") {
       this.setState({
@@ -58,9 +57,10 @@ class App extends React.Component {
   }
 
   // Toggles visibility of the form for adding items
-  showItemForm = () => {
+  showItemForm = category => {
     this.setState({
-      itemFormActive: !this.state.itemFormActive
+      itemFormActive: !this.state.itemFormActive,
+      itemFormCategory: category
     })
   }
 
@@ -100,34 +100,76 @@ class App extends React.Component {
     })
   }
 
-  sorting = (a,b) => {
+  // Alphabetical sorting
+  sorting = (a, b) => {
     if (a.name < b.name) {
       return -1
     }
-    if (a.name > b.name ) {
+    if (a.name > b.name) {
       return 1
     }
     return 0
   }
 
-// const sortedItems = items.sort(sorting)
+  // Buy sorting
+  buySorting = (a, b) => {
+    // true values first returns 0
+    if (a.buy === b.buy) {
+      return 0
+    } else if (a.buy) {
+      return 1
+    } else return -1
+  }
 
+  // Home sorting
+  homeSorting = (a, b) => {
+    // true values first returns 0
+    if (a.got === b.got) {
+      return 0
+    } else if (a.got) {
+      return -1
+    } else return 1
+  }
 
-  // Don't know if this makes sense or not... Seems to be working...
-  itemCheck = (itemIdentity, keyToUpdate) => {
-    // console.log("tjena", itemIdentity, keyToUpdate)
+  // Changes the value of buy and home both in state and server.
+  itemCheck = (itemIdentity, itemToChange, keyToUpdate) => {
     const foundItem = this.state.items.find(item => item._id === itemIdentity)
-    // const foundItemIndex = this.state.items.findIndex(item => item._id === itemIdentity)
     const foundItemIndex = this.state.items.indexOf(foundItem)
-    // console.log("denna blev checkad", foundItem, foundItem[keyToUpdate])
-    // console.log("den har index", foundItemIndex)
     const itemsCopy = this.state.items
-    itemsCopy[foundItemIndex][keyToUpdate] = foundItem[keyToUpdate]
-    // debugger
+    itemsCopy[foundItemIndex][keyToUpdate] = itemToChange[keyToUpdate]
     this.setState({
       items: itemsCopy
     }, () => {
-      console.log(this.state.items)
+      fetch(`https://pantriqueen.herokuapp.com/items/${itemIdentity}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(itemToChange)
+      }).then(response => response.json())
+    })
+  }
+
+  // Changes the value of item both in state and server.
+  updateItem = (changedItem, itemIdentity) => {
+    console.log(itemIdentity)
+    const foundItem = this.state.items.find(item => item._id === itemIdentity)
+    const foundItemIndex = this.state.items.indexOf(foundItem)
+    const itemsCopy = this.state.items
+    itemsCopy[foundItemIndex] = changedItem
+    this.setState({
+      items: itemsCopy,
+      changeItemFormActive: false
+    }, () => {
+      fetch(`https://pantriqueen.herokuapp.com/items/${itemIdentity}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(changedItem)
+      }).then(response => response.json())
     })
   }
 
@@ -138,29 +180,6 @@ class App extends React.Component {
     })
   }
 
-  // // Den här funktionen behöver uppdateras
-  // categoryClick = (cate, cateIndex) => {
-  //   this.setState({
-  //     filterVariable: cate
-  //   })
-  //   if (cateIndex > 2) {
-  //     this.setState({
-  //       filterVariable: cate,
-  //       sliceStart: this.state.sliceStart + 1
-  //     })
-  //   } else if (cateIndex < 2) {
-  //     if (this.state.sliceStart === 0) {
-  //       this.setState({
-  //         sliceStart: this.state.categoriesLength
-  //       })
-  //     }
-  //     this.setState({
-  //       filterVariable: cate,
-  //       sliceStart: this.state.sliceStart - 1
-  //     })
-  //   }
-  // }
-
   // Callback function from filter input in Footer to be passed into ItemList
   filterItems = search => {
     this.setState({
@@ -168,53 +187,55 @@ class App extends React.Component {
     })
   }
 
-  toggleEnterState = () => {
-    this.setState({ in: true });
+  deleteItem = itemIdentity => {
+    console.log("Got an item to delete", itemIdentity)
+    const foundItem = this.state.items.find(item => item._id === itemIdentity) // Hittar den i state
+    const foundItemIndex = this.state.items.indexOf(foundItem) // tar ut index
+    const itemsCopy = this.state.items // Gör en kopia
+    itemsCopy.splice(foundItemIndex, 1) // splicear bort den ur kopian
+    this.setState({
+      items: itemsCopy
+    }, () => {
+      console.log("nu är den borttagen", this.state.items)
+      fetch(`https://pantriqueen.herokuapp.com/items/${itemIdentity}`, {
+        method: "DELETE"
+      })
+    })
   }
 
   render() {
-    // let fiveCategories = []
-    // if (this.state.categoriesLength) {
-    //   if (this.state.categoriesLength >= 5) {
-    //     fiveCategories = this.state.categories.slice(
-    //       this.state.sliceStart,
-    //       this.state.sliceStart + this.state.sliceEnd
-    //     )
-    //     console.log("fem kategorier", fiveCategories)
-    //   }
-    // }
     return (
       <BrowserRouter>
         <div className={`app-container ${this.state.homeMode ? "app-home-mode" : "app-shop-mode"} `}>
           <Header
             dbCategories={this.state.categories}
-            // fiveCategories={fiveCategories}
             showCateForm={this.showCateForm}
             categoryClick={this.categoryClick}
             backgroundHome={this.state.homeMode} />
 
-          <div className={this.state.cateFormActive ? "active" : "inactive"}>
+          {this.state.cateFormActive &&
             <CategoryForm
               gotNewCate={this.addNewCate}
-              showCateForm={this.showCateForm} />
-          </div>
+              showCateForm={this.showCateForm} />}
 
-          {/* <CSSTransitionGroup> */}
-            {/* <div className={this.state.itemFormActive ? "active" : "inactive"}> */}
-            {this.state.itemFormActive && <ItemForm
-                dbCategories={this.state.categories}
-                gotNewItem={this.addNewItem}
-                showItemForm={this.showItemForm} />
-              }
-            {/* </div> */}
-          {/* </CSSTransitionGroup> */}
+          {this.state.itemFormActive &&
+            <ItemForm
+              dbCategories={this.state.categories}
+              gotNewItem={this.addNewItem}
+              showItemForm={this.showItemForm}
+              initialCategory={this.state.itemFormCategory}
+              units={units} />
+          }
 
-          <div className={this.state.changeItemFormActive ? "active" : "inactive"}>
+          {this.state.changeItemFormActive &&
             <ChangeItemForm
               dbCategories={this.state.categories}
-              gotChangeItem={this.state.itemToChange}
-              showChangeItemForm={this.showChangeItemForm} />
-          </div>
+              changeItem={this.state.itemToChange}
+              showChangeItemForm={this.showItemChangeForm}
+              units={units}
+              deleteItem={this.deleteItem}
+              updateItem={this.updateItem} />
+          }
 
           <Route
             exact

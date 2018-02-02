@@ -8,13 +8,13 @@ body {
 }
 
 @keyframes greenToGray {
-    from {background-color: #009688;}
-    to {background-color: #ecedef}
+  from {background-color: #009688;}
+  to {background-color: #ecedef}
 }
 
 @keyframes grayToGreen {
-    from {background-color: #ecedef;}
-    to {background-color: #009688}
+  from {background-color: #ecedef;}
+  to {background-color: #009688}
 }
 
 .app-container {
@@ -50,18 +50,24 @@ h2 {
   font-size: 30px;
 }
 
+h3 {
+  text-align: center;
+  color: #009688;
+  font-family: 'Dosis', sans-serif;
+}
+
 p {
   font-family: 'Dosis', sans-serif;
 }
+
 @media (min-width: 426px) and (max-width: 1024px)  {
   h1 {
     font-size: 46px;
   }
-
 }
+
 @media (min-width: 1024px) {
   h1 {
     font-size: 46px;
   }
-
 }

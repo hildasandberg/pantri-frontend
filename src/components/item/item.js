@@ -6,57 +6,45 @@ export default class ItemForm extends React.Component {
   constructor(props) {
     super(props)
 
-    let gotAnItem = {
-      name: "",
-      category: "",
-      amount: "",
-      unit: "",
-      got: false,
-      buy: false,
-      _id: ""
-    }
-
-    if (this.props.item) {
-      gotAnItem = this.props.item
-    }
-
     this.state = {
-      item: gotAnItem
+      showHomepop: false,
+      showBuypop: false
     }
   }
 
   // Change information about an item
   changeItem = (item, event) => {
-    // console.log("you clicked to change:", item)
     this.props.showItemChangeForm(item)
-    // add the information to the change form
-    // save changes in temporary itemobject
-    // find and replace the item in server
-    // find and replace the item in app.state.items
   }
 
   // Change the value of got or buy to the opposite, change in app and change in server
   handleCheck = event => {
-    console.log("The item was checked ", event.target.name)
-    const { item } = this.state
-    item[event.target.name] = !item[event.target.name]
+    const item = this.props.item
     const keyToUpdate =  event.target.name
-    this.setState(
-      { item },
-      () => {
-        console.log("The item", this.state.item)
-        const identity = this.state.item._id
-        this.props.itemCheck(identity, keyToUpdate)
-        fetch(`http://localhost:8080/items/${identity}`, {
-          method: "PUT",
-          headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(this.state.item)
-        }).then(response => response.json())
-      }
-    )
+    item[event.target.name] = !item[event.target.name]
+    const identity = this.props.item._id
+    this.props.itemCheck(identity, item, keyToUpdate)
+    if (event.target.name === "got" && item[event.target.name]) {
+      this.setState({
+        showHomepop: true
+      }, () => {
+        setInterval(() => {
+          this.setState({
+            showHomepop: false
+          })
+        }, 2000)
+      })
+    } else if (event.target.name === "buy" && item[event.target.name]) {
+      this.setState({
+        showBuypop: true
+      }, () => {
+        setInterval(() => {
+          this.setState({
+            showBuypop: false
+          })
+        }, 2000)
+      })
+    }
   }
 
   // <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
@@ -78,11 +66,16 @@ export default class ItemForm extends React.Component {
 
           <div className="home-container">
             <label className="home-label">
+              {this.state.showHomepop &&
+                <div className="home-popup">
+                  Added to home list
+                </div>
+              }
               <input
                 className="home-input"
                 name="got"
                 type="checkbox"
-                checked={this.state.item.got}
+                checked={this.props.item.got}
                 onChange={this.handleCheck} />
               <i className="fas fa-home" />
             </label>
@@ -90,11 +83,16 @@ export default class ItemForm extends React.Component {
 
           <div className="shop-container">
             <label className="shop-label">
+              {this.state.showBuypop &&
+                <div className="buy-popup">
+                  Added to shopping list
+                </div>
+              }
               <input
                 className="buy-input"
                 name="buy"
                 type="checkbox"
-                checked={this.state.item.buy}
+                checked={this.props.item.buy}
                 onChange={this.handleCheck} />
               <i className="fas fa-shopping-cart" />
             </label>

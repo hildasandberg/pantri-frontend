@@ -1,63 +1,55 @@
 import React from "react"
 import "./form.css"
 
-const units = ["pcs", "g", "hg", "kg", "l", "dl", "ml", "bag", "bottle"]
-
 export default class ChangeItemForm extends React.Component {
-
   constructor(props) {
     super(props)
-
-    if (this.props.gotChangeItem) {
-      console.log("halloooo", this.props.gotChangeItem)
-    }
+    console.log(props)
 
     this.state = {
-      // categories: cate,
-      addNewItem: {
-        name: this.props.gotChangeItem.name,
-        category: "",
-        amount: "",
-        unit: "",
-        got: false,
-        buy: false
+      changeItem: {
+        _id: props.changeItem._id,
+        name: props.changeItem.name,
+        category: props.changeItem.category,
+        amount: props.changeItem.amount,
+        unit: props.changeItem.unit,
+        got: props.changeItem.got,
+        buy: props.changeItem.buy
       }
     }
   }
 
   handleInput = event => {
-    const { addNewItem } = this.state
-    addNewItem[event.target.name] = event.target.value
-    this.setState({ addNewItem })
+    const { changeItem } = this.state
+    changeItem[event.target.name] = event.target.value
+    this.setState({ changeItem })
   }
 
-  // Ändra denna till en put.
+  handleCheck = event => {
+    console.log("The item was checked ", event.target.name)
+    const { changeItem } = this.state
+    changeItem[event.target.name] = !changeItem[event.target.name]
+    this.setState({ changeItem })
+  }
+
+  deleteItem = () => {
+    console.log("The item shall be deleted ", this.props.changeItem._id)
+    this.props.deleteItem(this.props.changeItem._id)
+  }
+
   handleSubmit = event => {
-    console.log("Submittar form och vill skicka", this.state.addNewItem)
+    console.log("Submittar form och vill skicka", this.state.changeItem)
     event.preventDefault()
-    fetch("http://localhost:8080/items", {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(this.state.addNewItem)
-    }).then(response => {
-      console.log(response)
-      const newbie = this.state.addNewItem
-      this.props.gotNewItem(newbie)
-      // return response.json()
-      if (response.ok) {
-        this.setState({
-          addNewItem: {
-            name: "",
-            category: "",
-            amount: "",
-            unit: "",
-            got: false,
-            buy: false
-          }
-        })
+    this.props.updateItem(this.state.changeItem, this.state.changeItem._id)
+    this.setState({
+      changeItem: {
+        id: "",
+        name: "",
+        category: "",
+        amount: "",
+        unit: "",
+        got: "",
+        buy: ""
       }
     })
   }
@@ -65,66 +57,104 @@ export default class ChangeItemForm extends React.Component {
   render() {
     return (
       <div className="page-darker">
-        <div className="category-form-container">
-          <button className="close-btn" onClick={this.props.showChangeItemForm}> Close </button>
-
+        <div className="item-form-container">
+          <div className="red-buttons">
+            <button className="delete-btn" onClick={this.deleteItem}>
+              <i className="fas fa-trash-alt" />
+            </button>
+            <button className="close-btn" onClick={this.props.showChangeItemForm}> Close </button>
+          </div>
           <form onSubmit={this.handleSubmit} className={`form-container ${this.props.type}`}>
+            <h3>Change item</h3>
             <div>
+              Name:
               <input
+                required
+                maxlength="25"
                 type="text"
                 name="name"
-                placeholder="Add you item here"
-                value={this.state.addNewItem.name}
+                placeholder={this.state.changeItem.name}
+                value={this.state.changeItem.name}
                 onChange={this.handleInput} />
             </div>
 
             <div
               className="inputCategory"
-              value={this.state.addNewItem.category}
-              onChange={this.handleInput}>
+              value={this.state.changeItem.category} >
               Category:
-              <select className="selectCategory" name="category">
+              <select
+                onChange={this.handleInput}
+                className="selectCategory"
+                name="category"
+                defaultValue={this.props.changeItem.category} >
                 {this.props.dbCategories.map(item =>
-                  <option value={item.name} key={item._id} >{item.name}</option>)
+                  <option
+                    selected={this.props.changeItem.category === item.name}
+                    value={item.name}
+                    key={item._id} >
+                    {item.name}
+                  </option>)
                 }
               </select>
             </div>
 
+            Amount:
             <input
               type="text"
               name="amount"
-              placeholder="How much"
-              value={this.state.addNewItem.amount}
+              maxlength="25"
+              placeholder={this.props.changeItem.amount}
+              value={this.state.changeItem.amount}
               onChange={this.handleInput} />
 
             <div
               className="inputUnit"
-              value={this.state.addNewItem.unit}>
+              value={this.state.changeItem.unit} >
               Unit:
-              <select className="selectUnit" name="unit" onChange={this.handleInput}>
-                {units.map(item =>
-                  <option key={item} value={item}>{item}</option>)}
+              <select
+                onChange={this.handleInput}
+                className="selectUnit"
+                name="unit"
+                defaultValue={this.props.changeItem.unit} >
+                {this.props.units.map(item =>
+                  <option
+                    selected={this.props.changeItem.unit === item}
+                    key={item}
+                    value={item}>
+                    {item}
+                  </option>)
+                }
               </select>
             </div>
 
-            Got this at home?
-            <input
-              className="gotAtHome"
-              name="got"
-              type="checkbox"
-              checked={this.state.addNewItem.got}
-              onChange={this.handleCheck} />
+            <div className="form-item-status">
+              <div className="home-container">
+                <label className="home-label">
+                  <input
+                    className="home-input"
+                    name="got"
+                    type="checkbox"
+                    checked={this.state.changeItem.got}
+                    onChange={this.handleCheck} />
+                  <i className="fas fa-home" />
+                </label>
+              </div>
 
-            Need to buy?
-            <input
-              className="toBuy"
-              name="buy"
-              type="checkbox"
-              checked={this.state.addNewItem.buy}
-              onChange={this.handleCheck} />
+              <div className="shop-container">
+                <label className="shop-label">
+                  <input
+                    className="buy-input"
+                    name="buy"
+                    type="checkbox"
+                    checked={this.state.changeItem.buy}
+                    onChange={this.handleCheck} />
+                  <i className="fas fa-shopping-cart" />
+                </label>
+              </div>
+            </div>
 
             <div>
-              <input className="submit-btn" type="submit" value="Send" />
+              <button className="submit-btn" type="submit"> Change item </button>
             </div>
           </form>
         </div>

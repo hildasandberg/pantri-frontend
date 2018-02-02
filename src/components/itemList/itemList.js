@@ -5,11 +5,11 @@ import "./itemList.css"
 class ItemList extends React.Component {
 
   handleAddClick = () => {
-    this.props.showItemForm()
+    this.props.showItemForm(this.props.filterVariable)
   }
 
-  checkItem = (identity, keyToUpdate) => {
-    this.props.checkItem(identity, keyToUpdate)
+  checkItem = (identity, item, keyToUpdate) => {
+    this.props.checkItem(identity, item, keyToUpdate)
   }
 
   render() {
@@ -46,13 +46,14 @@ class ItemList extends React.Component {
 
     return (
       <div className="item-in-list">
+        {this.props.filterVariable && <h3>{this.props.filterVariable}</h3>}
         {itemsToRender.map(item =>
           <Item
             key={item._id}
             item={item}
             itemCheck={this.checkItem}
             showItemChangeForm={this.props.showItemChangeForm} />)}
-        <button className="add-item-button" onClick={this.handleAddClick}>+</button>
+        <button className="add-item-button" onClick={this.handleAddClick}><i className="fas fa-plus" /></button>
       </div>
     )
   }

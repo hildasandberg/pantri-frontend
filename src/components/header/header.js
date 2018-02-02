@@ -3,20 +3,6 @@ import Slider from "react-slick"
 import "./header.css"
 
 class Header extends React.Component {
-  // constructor(props) {
-  //   super(props)
-  //   this.state = {
-  //     dbCategories: []
-  //   }
-  // }
-  //
-  // ComponentWillRecieveProps(nextProps) {
-  //   if (nextProps.dbCategories !== this.state.dbCategories) {
-  //     this.setState({
-  //       dbCategories: nextProps.dbCategories
-  //     })
-  //   }
-  // }
 
   handleAddClick = () => {
     this.props.showCateForm()
@@ -28,20 +14,29 @@ class Header extends React.Component {
   }
 
   render() {
-    // let categories = []
-    // if (this.props.fiveCategories) {
-    //   categories = this.props.fiveCategories
-    // } else {
-    //   categories = this.props.dbCategories
-    // }
 
     const settings = {
       infinite: true,
       speed: 500,
       slidesToShow: 5,
-      slidesToScroll: 1,
-      focusOnSelect: true,
-      swipeToSlide: true
+      swipeToSlide: true,
+      adaptiveHeight: true,
+      initialSlide: 3,
+      responsive: [
+        { breakpoint: 460,
+          settings: { slidesToShow: 5 }
+        },
+        { breakpoint: 680,
+          settings: { slidesToShow: 7 }
+        },
+        { breakpoint: 10000,
+          settings: { slidesToShow: 7 }
+        }
+        ,
+        { breakpoint: 100000,
+          settings: 'unslick'
+        }
+      ]
     }
 
     return (
@@ -50,17 +45,16 @@ class Header extends React.Component {
         <div className="header-cate-container">
           <Slider {...settings}>
             {this.props.dbCategories.map((item, index) =>
-              <div className="one-cate">
+              <div key={item._id} className="one-cate">
                 <div className="one-cate-image">
                   <img
-                  key={item._id}
                   onClick={this.handleCategoryClick}
                   name={item.name}
                   alt={item.name}
                   src={item.icon}
                   data-message={index} />
                 </div>
-                <p>{item.name}</p>
+                <p className={`header-p ${this.props.backgroundHome ? "header-p-home-mode" : "header-p-shop-mode"} `}>{item.name}</p>
               </div>)
             }
           </Slider>
